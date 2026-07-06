@@ -714,6 +714,8 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
   letter-spacing: .01em;
 }
 .pricing__detail { margin-top: var(--space-4); font-size: var(--fs-400); color: var(--cream-dim); }
+.pricing__actions { margin-top: var(--space-6); display: flex; justify-content: center; }
+.pricing__micro { margin-top: var(--space-4); color: var(--cream-dim); font-size: var(--fs-200); }
 
 /* @component: ph (placeholder chip) */
 .ph {

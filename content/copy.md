@@ -43,14 +43,18 @@ Cresscit built a calm, clear site that gets patients to booking in one click.
 2. **Build** — We design and build your site around what you told us.
 3. **Run** — We host it, maintain it, and handle small edits — for as long as you're with us.
 
-## PRICING TEASER
-One flat monthly fee — hosting, maintenance, and edits, all included.
-[SETUP FEE] to start, then [MONTHLY PRICE] a month. Nothing else to manage.
+## PRICING — REQUEST A QUOTE
+- Section heading (on-page): Pricing
+- Lead line: One flat monthly fee. Everything included.
+- Support line: No two businesses need the same site, so we don't pretend they do. Tell us what you need — we'll quote you one flat monthly price that covers it all.
+- Button label: Request a Quote
+- Mailto subject: Website quote request
+- Microline: The quote is free. So is saying no.
 
 ## FINALE CTA
 - Closing line: Get your site live this week.
 - Primary button: See My Free Preview
-- Secondary button: See Pricing
+- Secondary button: Get a Quote
 - Reassurance microline: No contract. No pressure. Cancel anytime.
 
 ## FOOTER

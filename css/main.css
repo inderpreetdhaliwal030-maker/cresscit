@@ -219,11 +219,20 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
 }
 .hero__scene { position: absolute; inset: 0; z-index: var(--z-scene); }
 
-/* Canvas starts invisible; `.webgl-ready` (added when the lazy-loaded scene
-   initializes) fades it in over the poster. */
+/* THE CONTINUOUS WORLD LAYER.
+   The canvas is a FIXED full-viewport layer behind ALL content — it renders
+   one persistent 3D world for the whole page, not just the hero. It sits below
+   every section (z-index below --z-content), is aria-hidden and non-interactive.
+   The poster fallback stays inside the hero (absolute) — it only ever needs to
+   cover the hero framing while the scene lazy-loads or when WebGL is absent. */
 .hero__canvas {
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: var(--z-base);        /* behind all sections (--z-content = 2) */
+  pointer-events: none;
   opacity: 0;
   transition: opacity var(--dur-mid) var(--ease-out);
 }
@@ -243,6 +252,25 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
 }
 .webgl-ready .hero__fallback { opacity: 0; }
 .no-webgl .hero__canvas { display: none; }
+
+/* ── THE WORLD SHOWING THROUGH THE PAGE ───────────────────────────────────
+   Only once `.webgl-ready` (WebGL live): the opaque section backgrounds become
+   translucent ink scrims so the continuous 3D world glows THROUGH the content
+   while text keeps its contrast. Without WebGL (or reduced motion) the sections
+   stay fully opaque exactly as shipped — this is progressive enhancement only.
+
+   Scrims are tuned per section: bands that must own the frame (stats numbers,
+   pricing text) keep a heavier veil; the void sections (hero, pillars, finale)
+   go fully transparent so the world reads at full strength. The body stays ink
+   (the base coat behind the fixed canvas). Zero layout change — background only. */
+.webgl-ready .stats { background: rgba(10, 10, 12, .62); }
+.webgl-ready .work { background: rgba(10, 10, 12, .5); }
+.webgl-ready .steps { background: rgba(10, 10, 12, .58); }
+.webgl-ready .pricing { background: rgba(16, 16, 20, .66); }
+.webgl-ready .pillars,
+.webgl-ready .finale { background: transparent; }
+/* Cards keep their own panel fill so mockups stay legible over the world. */
+.webgl-ready .footer { background: rgba(10, 10, 12, .7); }
 .hero__slab {
   width: min(38vw, 320px);
   aspect-ratio: 2.2 / 3.4;
@@ -395,6 +423,9 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
   transform-style: preserve-3d;
   pointer-events: none;
 }
+/* When the WebGL world is live, the 3D forge field replaces this DOM layer —
+   retire it so the two don't double up. (Reduced motion already hides it.) */
+.webgl-ready .forge { display: none; }
 .forge__window {
   --z: 0px; --x: 0%; --y: 0%; --s: 1; --delay: 0s;
   position: absolute;

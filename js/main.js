@@ -67,7 +67,34 @@ function runProgress() {
 const heroSection = document.querySelector('[data-hero]');
 const heroCanvas = document.querySelector('[data-hero-canvas]');
 let hero = null;       // set late by scheduleHeroScene() — ALWAYS null-guard
-let heroVisible = true;
+
+/* Global document scroll progress P (0→1 over the whole page) drives the
+   continuous world's camera timeline. heroP is the hero-section-local progress
+   (0→1 over its pinned 300vh) that keeps the monolith orbit byte-identical.
+   Both are recomputed each frame in the shared loop and fed to the world. */
+let worldP = 0;
+let heroLocalP = 0;
+function computeGlobalProgress() {
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - window.innerHeight;
+  worldP = max > 0 ? clamp01(window.scrollY / max) : 0;
+  if (heroSection) {
+    const r = heroSection.getBoundingClientRect();
+    const travel = r.height - window.innerHeight;
+    heroLocalP = travel > 0 ? clamp01(-r.top / travel) : 0;
+  } else {
+    heroLocalP = worldP;
+  }
+}
+
+/* World render pauses when the tab is hidden or an overlay (Preview Machine /
+   Quote Form) is open — reuse of the hero visibility-pause pattern, extended
+   to the whole-page world. */
+let worldPausedByOverlay = false;
+let docHidden = document.hidden;
+document.addEventListener('visibilitychange', () => { docHidden = document.hidden; });
+function pauseWorld() { worldPausedByOverlay = true; }
+function resumeWorld() { worldPausedByOverlay = false; }
 
 function setupHeroChoreo() {
   const letters = document.querySelectorAll('[data-hero-title] span');
@@ -77,7 +104,9 @@ function setupHeroChoreo() {
   if (prefersReduced || !heroSection) return;
 
   onProgress(heroSection, (p) => {
-    if (hero) hero.setProgress(p);   // scene may not have loaded yet
+    // NOTE: the WebGL world is driven globally from the shared loop
+    // (hero.setProgress(worldP, heroLocalP)) — NOT here. This callback owns
+    // only the DOM kinetic type, which stays live even before the scene loads.
 
     // Letters track in across p 0 → 0.35, staggered per letter.
     const span = 0.35;
@@ -126,17 +155,22 @@ function scheduleHeroScene() {
       return;
     }
     hero.resize();
-    // Crossfade: canvas fades in, poster fades out (CSS, ~400ms).
-    document.documentElement.classList.add('webgl-ready');
-
-    // Pause rendering while the hero is offscreen (perf).
-    if ('IntersectionObserver' in window && heroSection) {
-      const io = new IntersectionObserver(
-        ([entry]) => { heroVisible = entry.isIntersecting; },
-        { threshold: 0 }
-      );
-      io.observe(heroSection);
+    // Dev-only QA handle (localhost / 127.0.0.1 only) — read-only telemetry for
+    // the walkthrough harness (draw calls, station flags). Never attached in prod.
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      window.__cresscitWorld = hero;
     }
+    // Feed the world its current progress immediately so the crossfade reveals
+    // the correct station (not a station-1 frame) if the user has already
+    // scrolled past the hero before the scene lazy-loaded.
+    computeGlobalProgress();
+    hero.setProgress(worldP, heroLocalP);
+    // Crossfade: canvas fades in, poster fades out (CSS, ~400ms). `.webgl-ready`
+    // also retires the DOM forge windows — the 3D forge field replaces them.
+    document.documentElement.classList.add('webgl-ready');
+    // The world spans the WHOLE page now, so there is no hero-offscreen pause;
+    // rendering only stops when the tab is hidden or an overlay is open
+    // (handled in the shared loop via docHidden / worldPausedByOverlay).
   }
 
   // Single gate: first trigger OR fallback timer wins; the rest are inert.
@@ -370,8 +404,8 @@ function setupPreviewTriggers() {
           mod.openPreviewMachine({
             trigger,
             reducedMotion: prefersReduced,
-            lockScroll: () => { if (lenis) lenis.stop(); },
-            unlockScroll: () => { if (lenis) lenis.start(); },
+            lockScroll: () => { if (lenis) lenis.stop(); pauseWorld(); },
+            unlockScroll: () => { if (lenis) lenis.start(); resumeWorld(); },
           });
         })
         .catch(() => {
@@ -402,8 +436,8 @@ function setupQuoteTriggers() {
           mod.openQuoteForm({
             trigger,
             reducedMotion: prefersReduced,
-            lockScroll: () => { if (lenis) lenis.stop(); },
-            unlockScroll: () => { if (lenis) lenis.start(); },
+            lockScroll: () => { if (lenis) lenis.stop(); pauseWorld(); },
+            unlockScroll: () => { if (lenis) lenis.start(); resumeWorld(); },
           });
         })
         .catch(() => {
@@ -420,8 +454,15 @@ function setupQuoteTriggers() {
 function startLoop() {
   function frame(now) {
     if (lenis) lenis.raf(now);
-    runProgress();
-    if (hero && heroVisible) hero.render(now / 1000);
+    runProgress();                 // DOM section choreo (kinetic type, pillars…)
+    computeGlobalProgress();       // worldP + heroLocalP for the WebGL world
+
+    // Drive + render the continuous world. Paused when the tab is hidden or an
+    // overlay is open (perf + it would be invisible behind the dialog anyway).
+    if (hero && !docHidden && !worldPausedByOverlay) {
+      hero.setProgress(worldP, heroLocalP);
+      hero.render(now / 1000);
+    }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

@@ -334,7 +334,10 @@ function setupLenis() {
     smoothWheel: true,
   });
   // Anchor links routed through Lenis for a smooth glide.
+  // Preview-machine triggers are excluded — their click opens the overlay
+  // instead of scrolling (their href stays as the no-JS fallback).
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    if (a.hasAttribute('data-preview-trigger')) return;
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
       if (id.length < 2) return;
@@ -342,6 +345,39 @@ function setupLenis() {
       if (!target) return;
       e.preventDefault();
       lenis.scrollTo(target, { offset: -80 });
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   Preview Machine triggers — js/preview-machine.js is dynamically imported on
+   FIRST click (zero bytes in the initial load; cached for later clicks).
+   The trigger's href (mailto / #contact) remains the no-JS fallback, and we
+   also fall back to it if the module somehow fails to load.
+   -------------------------------------------------------------------------- */
+function setupPreviewTriggers() {
+  const triggers = document.querySelectorAll('[data-preview-trigger]');
+  if (!triggers.length) return;
+
+  let modPromise = null;
+  const loadModule = () => (modPromise ||= import('./preview-machine.js'));
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      loadModule()
+        .then((mod) => {
+          mod.openPreviewMachine({
+            trigger,
+            reducedMotion: prefersReduced,
+            lockScroll: () => { if (lenis) lenis.stop(); },
+            unlockScroll: () => { if (lenis) lenis.start(); },
+          });
+        })
+        .catch(() => {
+          // Module unavailable — degrade to the link's own destination.
+          window.location.href = trigger.getAttribute('href');
+        });
     });
   });
 }
@@ -372,6 +408,7 @@ function boot() {
   setupFinale();
   setupCardTilt();
   setupLenis();
+  setupPreviewTriggers();
 
   // Run progress once so initial (above-the-fold) state is correct.
   runProgress();

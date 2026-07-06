@@ -68,3 +68,58 @@ One flat monthly fee — hosting, maintenance, and edits, all included.
 - Nav labels: Work, Pricing, Contact
 - Sticky nav CTA: Get Started
 - 404 line: This page went out for a walk. Your website won't.
+
+## PREVIEW MACHINE
+
+### Overlay headline
+See your site take shape.
+
+### Overlay subline
+Type your business name, pick your trade — we'll handle the rest.
+
+### Business-name field
+- Label: Your business name
+- Placeholder: e.g. Ember & Oak
+
+### Vertical picker
+- Label: What do you do?
+- Options: Restaurant / Trades & Contracting / Clinic / Something Else
+
+### Assembling status line
+Building your homepage, section by section…
+
+### Post-reveal line (above CTA)
+That took ten seconds — your real preview is hand-built by us, free, and in your inbox within days.
+
+### Primary CTA button
+Get My Hand-Built Preview
+
+### Microline under CTA
+Free. No contract. No pressure.
+
+### Close button aria-label
+Close preview
+
+### Mini-site copy — Restaurant
+- Nav brand fallback: Your Restaurant
+- Hero headline template: {{NAME}} — worth the reservation
+- Hero sub: Fresh menu. Easy booking. Open tonight.
+- Section labels: Menu / Reservations / Hours
+
+### Mini-site copy — Trades & Contracting
+- Nav brand fallback: Your Company
+- Hero headline template: {{NAME}} — built to last
+- Hero sub: Quality work. Straight quotes. On time.
+- Section labels: Our Work / Get a Quote / Service Area
+
+### Mini-site copy — Clinic
+- Nav brand fallback: Your Clinic
+- Hero headline template: {{NAME}} — care without the wait
+- Hero sub: Book online. Be seen sooner.
+- Section labels: Services / Book a Visit / Our Team
+
+### Mini-site copy — Something Else
+- Nav brand fallback: Your Business
+- Hero headline template: {{NAME}} — open and easy to find
+- Hero sub: What you do, done well, one click away.
+- Section labels: About / Services / Contact

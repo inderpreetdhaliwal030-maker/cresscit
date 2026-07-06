@@ -34,10 +34,11 @@ work — ES modules and the import map require an `http(s)` origin.
 
 ```
 index.html          404.html
-css/tokens.css      css/main.css       (all design tokens live in tokens.css)
-js/main.js          js/hero-scene.js   (main = one rAF loop; hero-scene = WebGL)
+css/tokens.css      css/main.css        (all design tokens live in tokens.css)
+js/main.js          js/hero-scene.js    (main = one rAF loop; hero-scene = WebGL)
+js/preview-machine.js                   (CTA overlay — lazy, loads on first click)
 assets/vendor/      assets/fonts/       assets/img/favicon.svg
-content/            (BUILD_SPEC.md + copy.md — source of truth, not shipped code)
+content/            (specs + copy.md — source of truth, not shipped code)
 ```
 
 Reusable blocks are marked with `<!-- @component: name -->` comments to seed a
@@ -59,6 +60,13 @@ component library.
   stats at final values, and keeps the static CSS poster monolith — WebGL (and
   three.js itself) is never downloaded in this mode.
 - No WebGL (or scene load failure) → the same CSS poster stays; layout never breaks.
+- **Preview Machine** ("See My Free Preview" / "Get Started"): an a11y-correct
+  dialog (`role="dialog"`, focus trap, Esc/backdrop/X close, focus restore,
+  scroll lock) where a miniature themed homepage assembles for the visitor's
+  business. `js/preview-machine.js` is dynamically imported on first click —
+  zero bytes in the initial load; the triggers' `href`s remain the no-JS
+  fallback. User input is rendered via `textContent` only and never leaves the
+  page except in the visitor's own mailto handoff.
 - Fonts preloaded; scripts deferred/module; heights reserved to avoid layout shift.
 - Hosting note: serve `assets/vendor/*.js` with gzip/brotli and long-lived
   `Cache-Control` (any mainstream static host does this automatically) — three.js
@@ -73,7 +81,7 @@ These are intentionally left as obvious placeholders:
 | `[SETUP FEE]` | Pricing teaser | Rendered as an emerald-outline chip. Swap for real price. |
 | `[MONTHLY PRICE]` | Pricing teaser | Same — one-swap literal. |
 | `[INSTAGRAM] [X] [LINKEDIN] [EMAIL]` | Footer | Social placeholder chips → real profile links. |
-| `mailto:hello@cresscit.com` | Finale primary CTA | Placeholder address for the "See My Free Preview" button. |
+| `mailto:hello@cresscit.com` | Finale primary CTA (no-JS fallback) **and** the Preview Machine's "Get My Hand-Built Preview" CTA (`js/preview-machine.js`, `MAILTO_ADDR`) | Placeholder address — swap in both places (or just `MAILTO_ADDR` + the HTML fallback href). |
 | **og:image** | `<head>` | **Not yet added.** Add an Open Graph image and a `<meta property="og:image">` tag before sharing on social. |
 
 ## Credits

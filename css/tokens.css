@@ -95,6 +95,7 @@
   --z-scene: 1;
   --z-content: 2;
   --z-nav: 50;
+  --z-overlay: 60;   /* preview-machine dialog (film grain stays above at 90) */
   --z-grain: 90;
   --z-skip: 100;
 

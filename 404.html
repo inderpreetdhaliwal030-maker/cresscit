@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found — Cresscit</title>
+  <meta name="theme-color" content="#0a0a0c">
+  <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
+  <link rel="preload" href="./assets/fonts/bebas-neue-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/main.css">
+  <style>
+    /* @component: page-404 (scoped — reuses tokens only) */
+    .nf {
+      min-height: 100vh;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      padding: 0 var(--gutter);
+      gap: var(--space-5);
+    }
+    .nf__code {
+      font-family: var(--font-display);
+      font-size: clamp(6rem, 22vw, 16rem);
+      line-height: .82;
+      letter-spacing: .02em;
+      color: var(--cream);
+    }
+    .nf__code b { color: var(--emerald); font-weight: 400; }
+    .nf__line { color: var(--cream-dim); font-size: var(--fs-400); max-width: 40ch; margin: 0 auto; }
+    .nf__actions { display: flex; justify-content: center; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#nf-main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- @component: nav (minimal) -->
+  <header class="nav is-scrolled">
+    <div class="nav__inner">
+      <a class="nav__wordmark" href="./index.html" aria-label="Cresscit — home">CRESSCIT</a>
+    </div>
+  </header>
+
+  <main id="nf-main">
+    <section class="nf" aria-labelledby="nf-code">
+      <p class="nf__code" id="nf-code" aria-label="404">4<b>0</b>4</p>
+      <p class="nf__line">This page went out for a walk. Your website won't.</p>
+      <div class="nf__actions">
+        <a class="btn btn--primary" href="./index.html">Go home</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

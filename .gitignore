@@ -1,0 +1,24 @@
+# OS junk only — nothing generated (this is a no-build static site).
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# Editor scratch
+*.swp
+*~
+.idea/
+.vscode/

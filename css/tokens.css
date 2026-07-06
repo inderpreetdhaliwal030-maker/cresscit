@@ -1,0 +1,116 @@
+/* ==========================================================================
+   CRESSCIT — Design Tokens
+   Every color / space / type / motion value the site uses lives HERE only.
+   Consumed by css/main.css. Do not hard-code raw values elsewhere.
+   ========================================================================== */
+
+/* @component: font-faces (self-hosted, OFL — no runtime CDN) */
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/bebas-neue-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/inter-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/inter-latin-600-normal.woff2') format('woff2');
+}
+
+:root {
+  /* ---- Ink (backgrounds) ------------------------------------------------ */
+  --ink: #0a0a0c;
+  --ink-2: #101014;
+  --ink-3: #16161c;
+
+  /* ---- Emerald (accent / glow only) ------------------------------------ */
+  --emerald: #19e08c;
+  --emerald-deep: #0b9159;
+  --emerald-glow: rgba(25, 224, 140, .35);
+
+  /* ---- Cream (type) ----------------------------------------------------- */
+  --cream: #f4efe4;
+  --cream-dim: #b9b4a6;
+
+  /* ---- Type families ---------------------------------------------------- */
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif; /* huge condensed */
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Menlo', 'Consolas', monospace;
+
+  /* ---- Fluid type scale (clamp: min / preferred / max) ------------------ */
+  --fs-100: .75rem;                                   /* 12px  — micro */
+  --fs-200: .875rem;                                  /* 14px  — small */
+  --fs-300: 1rem;                                     /* 16px  — body  */
+  --fs-400: 1.125rem;                                 /* 18px  — lead  */
+  --fs-500: clamp(1.5rem, 1rem + 2vw, 2.5rem);        /* sub-heads */
+  --fs-600: clamp(2.25rem, 1rem + 5vw, 4.5rem);       /* section heads */
+  --fs-700: clamp(3.5rem, 1rem + 9vw, 8rem);          /* pillar / display */
+  --fs-hero: 18vw;                                    /* CRESSCIT title */
+  --fs-finale: clamp(2.75rem, 1rem + 9vw, 9rem);      /* finale line */
+  --fs-stat: clamp(3.5rem, 2rem + 6vw, 7rem);         /* stat values */
+  --fs-ghost: clamp(9rem, 24vw, 22rem);               /* pillar ghost numerals */
+  --fs-ghost-sm: clamp(4rem, 22vw, 5.5rem);           /* ghost numerals, narrow screens */
+
+  --lh-tight: .9;
+  --lh-snug: 1.15;
+  --lh-body: 1.6;
+  --tracking-wide: .22em;
+  --tracking-wider: .34em;
+
+  /* ---- Spacing scale (4 / 8 / 16 / 24 / 40 / 64 / 96 / 160) ------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+  --space-7: 96px;
+  --space-8: 160px;
+
+  /* ---- Radii ------------------------------------------------------------ */
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* ---- Layout ----------------------------------------------------------- */
+  --maxw: 1200px;
+  --maxw-narrow: 760px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --hairline: 1px solid rgba(244, 239, 228, .12);
+  --nav-h: 72px;
+
+  /* ---- Z-layers --------------------------------------------------------- */
+  --z-base: 0;
+  --z-scene: 1;
+  --z-content: 2;
+  --z-nav: 50;
+  --z-grain: 90;
+  --z-skip: 100;
+
+  /* ---- Easings ---------------------------------------------------------- */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --ease-emphatic: cubic-bezier(.22, 1, .36, 1);
+
+  /* ---- Durations -------------------------------------------------------- */
+  --dur-fast: 160ms;
+  --dur-base: 220ms;
+  --dur-mid: 400ms;
+  --dur-slow: 700ms;
+  --dur-count: 900ms;
+
+  /* ---- Shadows / glow --------------------------------------------------- */
+  --shadow-card: 0 20px 60px -20px rgba(0, 0, 0, .8);
+  --shadow-glow: 0 0 0 1px var(--emerald-glow), 0 24px 70px -24px var(--emerald-glow);
+}

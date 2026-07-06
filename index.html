@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- @component: seo-head -->
+  <title>Cresscit — We Build and Run Your Website</title>
+  <meta name="description" content="Cresscit builds your small business website and runs it for good — hosting, maintenance, and edits, all in one flat monthly fee. Live in days.">
+  <meta name="theme-color" content="#0a0a0c">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Cresscit — We Build and Run Your Website So You Never Have To">
+  <meta property="og:description" content="A website that just works. Cresscit designs, launches, and maintains it — one flat monthly fee, zero effort from you.">
+  <!-- og:image intentionally omitted for now — see README. -->
+
+  <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
+
+  <!-- Preload the two above-the-fold faces (display title + body). -->
+  <link rel="preload" href="./assets/fonts/bebas-neue-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- Three.js resolves the bare "three" specifier to the vendored ES module. -->
+  <script type="importmap">
+    { "imports": { "three": "./assets/vendor/three.module.min.js" } }
+  </script>
+
+  <!-- Lenis (UMD) — deferred so it never blocks render. -->
+  <script src="./assets/vendor/lenis.min.js" defer></script>
+  <!-- Site behavior (ES module); it imports ./js/hero-scene.js itself. -->
+  <script type="module" src="./js/main.js"></script>
+</head>
+<body>
+  <!-- @component: skip-link -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- @component: grain (film-grain overlay, decorative) -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- @component: nav -->
+  <header class="nav" data-nav>
+    <div class="nav__inner">
+      <a class="nav__wordmark" href="#top" aria-label="Cresscit — home">CRESSCIT</a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn btn--pill" href="#contact">Get Started</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <span id="top" aria-hidden="true"></span>
+
+    <!-- @component: hero-monolith -->
+    <section class="hero" data-hero aria-labelledby="hero-title">
+      <div class="hero__pin">
+        <!-- Decorative fake-bloom + WebGL scene (or CSS fallback). -->
+        <div class="hero__bloom" aria-hidden="true"></div>
+        <div class="hero__scene" aria-hidden="true">
+          <canvas class="hero__canvas" data-hero-canvas></canvas>
+          <!-- CSS poster "monolith": visible while the WebGL scene lazy-loads;
+               stays permanently if WebGL is unavailable or motion is reduced. -->
+          <div class="hero__fallback" data-hero-fallback aria-hidden="true">
+            <div class="hero__slab"></div>
+          </div>
+        </div>
+
+        <div class="hero__overlay">
+          <!-- Real text H1 = LCP element (not drawn on canvas). -->
+          <h1 class="hero__title" id="hero-title" data-hero-title aria-label="Cresscit">
+            <span aria-hidden="true">C</span><span aria-hidden="true">R</span><span aria-hidden="true">E</span><span aria-hidden="true">S</span><span aria-hidden="true">S</span><span aria-hidden="true">C</span><span aria-hidden="true">I</span><span aria-hidden="true">T</span>
+          </h1>
+          <p class="hero__subtitle" data-hero-sub>We build your website. Then we run it — forever.</p>
+          <div class="hero__hint" data-hero-hint aria-hidden="true">
+            <span class="hero__hint-line"></span>
+            <span class="hero__hint-label">Scroll</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- @component: stats -->
+    <section class="stats" aria-label="Cresscit by the numbers" data-stats>
+      <div class="stats__inner">
+        <div class="stat">
+          <span class="stat__value"><span class="stat__num" data-count-to="7" data-count-decimals="0">0</span></span>
+          <span class="stat__suffix">days</span>
+          <span class="stat__label">to launch</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value"><span class="stat__num" data-count-to="99.9" data-count-decimals="1">0</span><span class="stat__unit">%</span></span>
+          <span class="stat__label">uptime target</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value"><span class="stat__num" data-count-to="1" data-count-decimals="0">0</span></span>
+          <span class="stat__suffix">fee</span>
+          <span class="stat__label">covers everything</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value"><span class="stat__num" data-count-to="0" data-count-decimals="0">0</span></span>
+          <span class="stat__suffix">hours</span>
+          <span class="stat__label">of upkeep for you</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- @component: pillars-forge -->
+    <section class="pillars" data-pillars aria-labelledby="pillars-heading">
+      <h2 class="visually-hidden" id="pillars-heading">Why Cresscit</h2>
+      <div class="pillars__pin">
+        <!-- Decorative floating holographic browser windows. -->
+        <div class="forge" aria-hidden="true">
+          <div class="forge__window" data-depth="0.10" style="--z:-620px; --x:-30%; --y:-24%; --s:.72; --delay:0s;">
+            <div class="win__bar"><span></span><span></span><span></span></div>
+            <div class="win__body"><i style="width:70%"></i><i style="width:44%"></i><i style="width:58%"></i><i class="win__block"></i></div>
+          </div>
+          <div class="forge__window" data-depth="0.18" style="--z:-460px; --x:34%; --y:-30%; --s:.82; --delay:-3s;">
+            <div class="win__bar"><span></span><span></span><span></span></div>
+            <div class="win__body"><i style="width:52%"></i><i class="win__block"></i><i style="width:64%"></i><i style="width:38%"></i></div>
+          </div>
+          <div class="forge__window" data-depth="0.30" style="--z:-300px; --x:-38%; --y:26%; --s:.92; --delay:-6s;">
+            <div class="win__bar"><span></span><span></span><span></span></div>
+            <div class="win__body"><i style="width:60%"></i><i style="width:80%"></i><i class="win__block"></i><i style="width:46%"></i></div>
+          </div>
+          <div class="forge__window" data-depth="0.46" style="--z:-160px; --x:40%; --y:24%; --s:1.02; --delay:-9s;">
+            <div class="win__bar"><span></span><span></span><span></span></div>
+            <div class="win__body"><i style="width:74%"></i><i style="width:50%"></i><i style="width:66%"></i><i class="win__block"></i></div>
+          </div>
+          <div class="forge__window" data-depth="0.60" style="--z:-40px; --x:0%; --y:-2%; --s:1.10; --delay:-12s;">
+            <div class="win__bar"><span></span><span></span><span></span></div>
+            <div class="win__body"><i style="width:56%"></i><i class="win__block"></i><i style="width:70%"></i><i style="width:42%"></i></div>
+          </div>
+        </div>
+
+        <div class="pillars__stage">
+          <!-- @component: pillar -->
+          <article class="pillar" data-pillar="0">
+            <span class="pillar__num" aria-hidden="true">01</span>
+            <div class="pillar__text">
+              <h3 class="pillar__head">Live in days, not months</h3>
+              <p class="pillar__body">No six-week build cycles. No agency queue. Tell us about your business and we'll have your site live in about a week.</p>
+            </div>
+          </article>
+          <article class="pillar" data-pillar="1">
+            <span class="pillar__num" aria-hidden="true">02</span>
+            <div class="pillar__text">
+              <h3 class="pillar__head">You own it, we maintain it</h3>
+              <p class="pillar__body">The site is yours — the name, the content, the leads it brings in. We just keep it fast, secure, and up to date so you never have to think about it.</p>
+            </div>
+          </article>
+          <article class="pillar" data-pillar="2">
+            <span class="pillar__num" aria-hidden="true">03</span>
+            <div class="pillar__text">
+              <h3 class="pillar__head">One flat monthly fee — everything included</h3>
+              <p class="pillar__body">Hosting, maintenance, small edits, security — bundled into a single line item. No surprise invoices, no upsells.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- @component: work-cards -->
+    <section class="work" id="work" aria-labelledby="work-heading">
+      <div class="work__inner">
+        <header class="work__header">
+          <h2 class="work__title" id="work-heading">Work</h2>
+          <p class="work__note">Illustrative concept builds — not live client work.</p>
+        </header>
+
+        <div class="work__grid">
+          <!-- @component: work-card -->
+          <article class="card reveal" data-card>
+            <div class="card__screen" aria-hidden="true">
+              <!-- Restaurant mockup: hero band + menu rows -->
+              <div class="mock mock--restaurant">
+                <div class="mock__band"></div>
+                <div class="mock__rows">
+                  <span class="mock__row"><em style="width:44%"></em><b></b></span>
+                  <span class="mock__row"><em style="width:58%"></em><b></b></span>
+                  <span class="mock__row"><em style="width:36%"></em><b></b></span>
+                  <span class="mock__row"><em style="width:50%"></em><b></b></span>
+                </div>
+                <span class="mock__cta">Reserve</span>
+              </div>
+            </div>
+            <div class="card__meta">
+              <h3 class="card__name">Ember &amp; Oak <span class="tag">Concept</span></h3>
+              <p class="card__line">Cresscit built a warm, menu-first site that makes reservations one tap away.</p>
+              <p class="card__vertical">Wood-fired kitchen</p>
+            </div>
+          </article>
+
+          <article class="card reveal" data-card>
+            <div class="card__screen" aria-hidden="true">
+              <!-- Contractor mockup: photo grid + quote button -->
+              <div class="mock mock--contractor">
+                <div class="mock__grid">
+                  <span></span><span></span><span></span>
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="mock__cta mock__cta--wide">Request a quote</span>
+              </div>
+            </div>
+            <div class="card__meta">
+              <h3 class="card__name">Halden Bros. Contracting <span class="tag">Concept</span></h3>
+              <p class="card__line">Cresscit built a job-photos-and-quote-request site that turns visitors into estimates.</p>
+              <p class="card__vertical">General contracting</p>
+            </div>
+          </article>
+
+          <article class="card reveal" data-card>
+            <div class="card__screen" aria-hidden="true">
+              <!-- Clinic mockup: calm rows + booking pill -->
+              <div class="mock mock--clinic">
+                <div class="mock__calm">
+                  <span class="mock__line" style="width:66%"></span>
+                  <span class="mock__line" style="width:48%"></span>
+                  <span class="mock__line" style="width:56%"></span>
+                </div>
+                <span class="mock__pill">Book online</span>
+              </div>
+            </div>
+            <div class="card__meta">
+              <h3 class="card__name">Willowmere Family Clinic <span class="tag">Concept</span></h3>
+              <p class="card__line">Cresscit built a calm, clear site that gets patients to booking in one click.</p>
+              <p class="card__vertical">Family clinic</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- @component: steps -->
+    <section class="steps" aria-labelledby="steps-heading">
+      <div class="steps__inner">
+        <h2 class="steps__title" id="steps-heading">How it works</h2>
+        <ol class="steps__rail">
+          <li class="step reveal">
+            <span class="step__num">1</span>
+            <h3 class="step__name">Brief</h3>
+            <p class="step__line">Answer a few questions about your business. Fifteen minutes, done.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__num">2</span>
+            <h3 class="step__name">Build</h3>
+            <p class="step__line">We design and build your site around what you told us.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step__num">3</span>
+            <h3 class="step__name">Run</h3>
+            <p class="step__line">We host it, maintain it, and handle small edits — for as long as you're with us.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- @component: pricing -->
+    <section class="pricing" id="pricing" aria-labelledby="pricing-heading">
+      <div class="pricing__inner">
+        <h2 class="pricing__lede" id="pricing-heading">One flat monthly fee — hosting, maintenance, and edits, all included.</h2>
+        <p class="pricing__detail">
+          <mark class="ph">[SETUP FEE]</mark> to start, then <mark class="ph">[MONTHLY PRICE]</mark> a month. Nothing else to manage.
+        </p>
+      </div>
+    </section>
+
+    <!-- @component: cta-finale -->
+    <section class="finale" id="contact" aria-labelledby="finale-heading">
+      <div class="finale__pin">
+        <div class="finale__inner">
+          <h2 class="finale__line" id="finale-heading" data-finale aria-label="Get your site live this week.">
+            <span class="word">Get</span> <span class="word">your</span> <span class="word">site</span> <span class="word">live</span> <span class="word">this</span> <span class="word">week.</span>
+          </h2>
+          <div class="finale__actions">
+            <a class="btn btn--primary" href="mailto:hello@cresscit.com?subject=Free%20preview%20request">See My Free Preview</a>
+            <a class="btn btn--outline" href="#pricing">See Pricing</a>
+          </div>
+          <p class="finale__micro">No contract. No pressure. Cancel anytime.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- @component: footer -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__tagline">We build and run it. You run your business.</p>
+      <p class="footer__social">
+        <mark class="ph">[INSTAGRAM]</mark> <mark class="ph">[X]</mark> <mark class="ph">[LINKEDIN]</mark> <mark class="ph">[EMAIL]</mark>
+      </p>
+      <p class="footer__credit">Founded by inder. &nbsp;·&nbsp; © 2026 Cresscit</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -163,15 +163,29 @@ A few quick questions — we'll come back with one flat price.
 - Label: Anything else we should know?
 - Placeholder: Deadlines, sites you like, budget worries — anything helps. Optional.
 
+### Contact fields
+- Email label: Your email
+- Email placeholder: you@yourbusiness.com
+- Email why-line: So we can send your quote.
+- Email is the ONLY required field on the form.
+- Inline validation message (missing/invalid): We just need an email we can reply to.
+- Phone label: Phone (optional)
+
 ### Submit button
 Send My Request
 
 ### Helper line under submit
-This opens your email app with everything pre-written — hit send and we'll reply with one flat quote.
+Hit send and it comes straight to us — we'll reply with one flat quote.
 
-### Clipboard fallback
-- Link-button label: No email app? Copy instead
-- Confirmation toast: Copied — ready to paste.
+### Sending state
+- In-flight button label: Sending…
+- Success headline: Got it.
+- Success supporting line: Your request is with us — we'll reply with your flat quote.
+- Success close-button label: Done
+
+### Error fallback
+- Error line: That didn't go through — our end, not yours.
+- Link-button label: Send it by email
 
 ### Close button aria-label
 Close quote form

@@ -1,59 +1,55 @@
-# QUOTE FORM — Build Spec (addendum; sibling of PREVIEW_MACHINE_SPEC.md)
-"Request a Quote" opens a short intake overlay; on submit the visitor's mail client opens
-with the answers pre-written, addressed to Cresscit. Copy from `content/copy.md`
-"## QUOTE FORM" — verbatim.
+# QUOTE FORM — Build Spec v2 (direct submit)
+The quote overlay now submits directly from the page and the lead is emailed to us —
+no mail-app handoff. Copy from `content/copy.md` "## QUOTE FORM" — verbatim, including
+the v2 pieces (contact fields, sending/sent states, error fallback).
 
-## Contact address centralization (do this first)
-Create `js/site-config.js` exporting `export const CONTACT_EMAIL = 'cresscit@gmail.com';`
-— imported by BOTH lazy modules (preview-machine.js MAILTO_ADDR switches to it too).
-Replace every static `hello@cresscit.com` in `index.html` no-JS fallback hrefs with the
-real address. README placeholder table: email row now says "live Gmail — swap to branded
-inbox later". One edit swaps it site-wide from then on.
+## Delivery service
+Web3Forms (built for static sites). POST `https://api.web3forms.com/submit` with JSON:
+`access_key` (from `js/site-config.js`), `subject` (same "Website quote request — {NAME}"
+template), `from_name` (business name or fallback), `email` (the visitor's email — becomes
+reply-to), `botcheck` (honeypot, must be empty), and `message` = the same compiled
+plain-text body as v1 (labels, "(not answered)" for blanks) plus `Phone:` line.
+Response JSON `{ success: true }` on delivery.
 
-## Architecture (mirror the Preview Machine exactly)
-- New module `js/quote-form.js`, dynamically imported on first click of a
-  `data-quote-trigger` element. Styles in `css/main.css` under
-  `<!-- @component: quote-form -->`, reusing the `.pm-` overlay/backdrop/panel/close
-  primitives where sensible (shared classes or thin `qf-` extensions — builder's call,
-  no duplication of the dialog shell rules).
-- Triggers: the pricing section "Request a Quote" button AND the finale secondary
-  "Get a Quote" (its `#pricing` href stays as no-JS fallback; pricing button keeps a
-  mailto fallback href to CONTACT_EMAIL). `preventDefault()` when JS is live.
-- Same dialog a11y contract as the Preview Machine (and same two lessons learned):
-  `role=dialog aria-modal`, focus into first field on open, trapped Tab cycle,
-  **document-level** keydown while open (Esc from body must work), backdrop + X close,
-  focus restore, scroll lock, `.pm-overlay[hidden]`-equivalent display:none guarantee.
-- User input: textContent / value reads only — never into HTML strings. Nothing stored,
-  nothing sent anywhere except the visitor's own mailto/clipboard.
+`js/site-config.js` adds:
+`export const WEB3FORMS_KEY = 'PENDING_KEY_FROM_FOUNDER';`
+(Web3Forms access keys are public-by-design for client-side embeds — committing it is
+correct, document that in the file comment. CONTACT_EMAIL stays for the fallback path.)
 
-## The form (single screen, scrolls inside panel if needed)
-Fields per copy.md: business name (text) · vertical (4 radio chips, reuse Preview Machine
-chip styling) · has-website (2 radio chips) · needs (7 checkboxes, styled as multi-select
-chips, "not sure yet" clears the others when checked and vice versa) · notes (textarea,
-3 rows). NOTHING is required — empty fields render as "(not answered)" in the email body.
-Submit button + helper line under it, clipboard-fallback link-button below that.
+## Form changes
+- New contact block ABOVE the notes field: "Your email" (type=email, autocomplete=email,
+  required — the ONLY required field; inline friendly validation message from copy.md on
+  blur/submit, aria-describedby wired) and "Phone (optional)" (type=tel, autocomplete=tel).
+- Hidden honeypot input (`botcheck`, visually hidden, aria-hidden, tabindex=-1).
+- Everything else (name, verticals, has-site, needs w/ mutual exclusion, notes) unchanged.
 
-## Submit behavior
-1. Compile a plain-text body, one line per answer:
-   Business: … / What they do: … / Has a site today: … / Needs: comma-list … /
-   Notes: … / trailing line "— sent from cresscit's quote form".
-2. Subject from copy.md template with the business name (fallback if empty: no name
-   segment). `mailto:CONTACT_EMAIL?subject=…&body=…` — both `encodeURIComponent`ed;
-   join body lines with `%0D%0A` (encode from a `\r\n`-joined string).
-3. Open via a temporary anchor click (not location.href — keeps the page state).
-   After triggering, show the helper line emphasized (aria-live polite) — do NOT close
-   the overlay automatically (their mail app opens over it; closing loses context).
-4. Clipboard fallback button: copies `To: CONTACT_EMAIL` + subject + the body text via
-   navigator.clipboard.writeText, try/catch → on failure select-able <textarea> reveal.
-   Success shows the toast text from copy.md (aria-live).
+## Submit flow
+1. Validate email; on fail show the inline message, focus the field, no request.
+2. In flight: submit button disabled + label swaps to the copy.md sending label;
+   AbortController timeout ~10s; Esc/close still works (abort the request).
+3. Success (`success: true`): swap the form for the Sent state — headline + supporting
+   line + Done button (from copy.md), `aria-live=polite` announcement; Done closes the
+   overlay with the standard close path (focus restore etc.). Re-opening later shows a
+   fresh form.
+4. Failure (network error, timeout, non-success response): keep the form intact (nothing
+   lost), show the error line + the "send by email instead" link-button — which fires the
+   v1 mailto path (same compiled body, PLUS a `Reply to: <their email>` line since mailto
+   can't set reply-to). No clipboard UI anymore — delete the v1 clipboard code.
+5. Double-submit guarded; the compiled body/message never interpolates user input into
+   HTML (textContent/value reads only, as established).
 
-## Definition of done (verify live before handing to QA)
-Both triggers open it; all fields keyboard-operable; "not sure yet" mutual-exclusion
-works; submit opens a correctly encoded mailto (inspect the href: subject has the name,
-body lines separated, no raw spaces/ampersands); empty-form submit produces valid
-"(not answered)" body; clipboard fallback copies the full text; Esc/backdrop/X/focus
-restore/scroll-lock all correct incl. Esc from body focus; 375×812 usable with internal
-scroll; reduced-motion fine (form has minimal animation anyway); zero console errors;
-initial-load network unchanged (module fetched only on trigger click); Preview Machine
-still fully works (shared CSS untouched in behavior). Update README (quote flow + email
-note). Screenshots: qf-form.png (filled), qf-sent.png (post-submit state), qf-mobile.png.
+## Unchanged contracts (re-verify, don't re-solve)
+Dialog a11y (focus trap, document-level Esc incl. from body, backdrop/X, display:none on
+close, scroll lock), lazy import on trigger click with zero initial-load impact, 375px
+usability, reduced-motion, no-JS fallback hrefs in index.html stay mailto.
+The Preview Machine keeps its mailto CTA — only the quote form changes.
+
+## Definition of done
+Local live run: email-validation both paths; in-flight state visible; SUCCESS path tested
+against the real Web3Forms endpoint ONCE with the real key (test lead clearly labeled,
+e.g. business name "QA test — ignore") and `success:true` confirmed; failure path tested
+by stubbing fetch to reject → error line + mailto fallback carries the full body incl.
+Reply-to line; honeypot present but invisible; double-submit blocked; all dialog contracts
+re-verified; console clean; initial network unchanged; screenshots qf2-form.png,
+qf2-sending.png, qf2-sent.png, qf2-error.png, qf2-mobile.png. Update README (quote flow
+now direct-submit via Web3Forms; key is public-by-design; monthly free-tier note).

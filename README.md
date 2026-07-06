@@ -69,10 +69,16 @@ component library.
   fallback. User input is rendered via `textContent` only and never leaves the
   page except in the visitor's own mailto handoff.
 - **Quote Form** ("Request a Quote" / "Get a Quote"): the same dialog contract,
-  lazily imported from `js/quote-form.js` on first click. A short intake
-  (nothing required) that on submit opens the visitor's mail client with the
-  answers pre-written to `CONTACT_EMAIL`, with a copy-to-clipboard fallback.
-  Answers never leave the page except via the visitor's own mail app/clipboard.
+  lazily imported from `js/quote-form.js` on first click. A short intake —
+  the visitor's email is the only required field — that **submits directly
+  from the page via [Web3Forms](https://web3forms.com)** (JSON POST, 10 s
+  abortable timeout, honeypot spam trap, in-flight/sent states). On failure
+  the form stays intact and offers a "Send it by email" mailto fallback
+  (compiled body + a `Reply to:` line). The Web3Forms `access_key` lives in
+  `js/site-config.js` (`WEB3FORMS_KEY`) — such keys are **public-by-design**
+  for client-side embeds, so committing it is correct. Note the Web3Forms
+  free tier has a monthly submission cap (~250/mo) — upgrade or swap
+  services if lead volume approaches it.
 - **Contact email** is centralized in `js/site-config.js` (`CONTACT_EMAIL`) —
   currently the founder's live Gmail. The two static no-JS fallback `href`s in
   `index.html` (finale primary CTA, pricing quote button) must be kept in sync
@@ -90,6 +96,7 @@ These are intentionally left as obvious placeholders:
 |---|---|---|
 | `[INSTAGRAM] [X] [LINKEDIN] [EMAIL]` | Footer | Social placeholder chips → real profile links. |
 | Contact email | `js/site-config.js` (`CONTACT_EMAIL`) + the two no-JS fallback `href`s in `index.html` | **Live Gmail** (`cresscit@gmail.com`) — real leads arrive there today; swap to a custom-domain inbox later. One edit in `site-config.js` covers both overlays. |
+| `WEB3FORMS_KEY` | `js/site-config.js` | Currently `'PENDING_KEY_FROM_FOUNDER'` — the quote form's direct submit will fail (and offer the mailto fallback) until the real Web3Forms access key is pasted in. Public-by-design, safe to commit. |
 | **og:image** | `<head>` | **Not yet added.** Add an Open Graph image and a `<meta property="og:image">` tag before sharing on social. |
 
 (The former `[SETUP FEE]` / `[MONTHLY PRICE]` chips were removed when the

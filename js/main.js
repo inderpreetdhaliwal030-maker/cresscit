@@ -257,8 +257,13 @@ function setupPillars() {
 
   onProgress(section, (p) => {
     // Which third are we in → active pillar (no dead zones).
+    // Directional states: i < idx has been passed (.is-past → exits upward);
+    // i > idx not yet reached (base state → waits below); i === idx active.
     const idx = Math.min(pillars.length - 1, Math.floor(p * pillars.length));
-    pillars.forEach((el, i) => el.classList.toggle('is-active', i === idx));
+    pillars.forEach((el, i) => {
+      el.classList.toggle('is-active', i === idx);
+      el.classList.toggle('is-past', i < idx);
+    });
 
     // Parallax the holographic windows by depth factor.
     windows.forEach((w) => {

@@ -107,8 +107,12 @@
   --dur-fast: 160ms;
   --dur-base: 220ms;
   --dur-mid: 400ms;
+  --dur-xfade: 450ms;   /* pillar directional crossfade */
   --dur-slow: 700ms;
   --dur-count: 900ms;
+
+  /* ---- Motion distances -------------------------------------------------- */
+  --shift-pillar: 32px; /* pillar enter-from-below / exit-upward travel */
 
   /* ---- Shadows / glow --------------------------------------------------- */
   --shadow-card: 0 20px 60px -20px rgba(0, 0, 0, .8);

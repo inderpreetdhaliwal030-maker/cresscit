@@ -462,17 +462,39 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
   padding: 0 var(--gutter);
 }
 /* @component: pillar */
+/* Directional crossfade — exactly ONE pillar readable at any scroll position
+   (stacked 25%-dim ghosts read as a triple exposure; see round-3 QA).
+   States, driven by the thirds logic in js/main.js:
+     (base)      not yet reached — waiting below at +shift, invisible
+     .is-active  on stage — full opacity, translateY(0)
+     .is-past    scrolled past — exits upward toward -shift while fading
+   Opacity/transform only (no layout); visibility flips AFTER the fade so
+   outgoing text never lingers, and inactive pillars are non-interactive. */
 .pillar {
   position: absolute;
   max-width: 720px;
   text-align: center;
-  opacity: .25;
-  transform: translateY(18px);
-  transition: opacity var(--dur-slow) var(--ease-out),
-              transform var(--dur-slow) var(--ease-out);
+  opacity: 0;
+  transform: translateY(var(--shift-pillar));
+  visibility: hidden;                 /* flips only after the fade completes */
+  pointer-events: none;
+  transition: opacity var(--dur-xfade) var(--ease-out),
+              transform var(--dur-xfade) var(--ease-out),
+              visibility 0s linear var(--dur-xfade);
   will-change: opacity, transform;
 }
-.pillar.is-active { opacity: 1; transform: translateY(0); }
+.pillar.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--dur-xfade) var(--ease-out),
+              transform var(--dur-xfade) var(--ease-out),
+              visibility 0s;
+}
+.pillar.is-past {
+  transform: translateY(calc(var(--shift-pillar) * -1));
+}
 .pillar__num {
   display: block;
   font-family: var(--font-display);
@@ -483,27 +505,13 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
   margin-bottom: -.12em;   /* ghost sits behind the headline (desktop art) */
 }
 /* Narrow screens (QA item 10): the ghost numeral must not obstruct pillar
-   text — shrink it and lift it clear of the headline (no negative overlap),
-   and fully hide inactive stacked pillars so their text can't bleed through
-   the active one. */
+   text — shrink it and lift it clear of the headline (no negative overlap).
+   Hiding inactive pillars now happens at ALL widths via the base rules above
+   (round-3), so no extra visibility overrides are needed here. */
 @media (max-width: 480px) {
   .pillar__num {
     font-size: var(--fs-ghost-sm);
     margin-bottom: var(--space-2);
-  }
-  .pillar {
-    opacity: 0;
-    visibility: hidden;   /* flips only after the fade-out completes */
-    transition: opacity var(--dur-slow) var(--ease-out),
-                transform var(--dur-slow) var(--ease-out),
-                visibility 0s linear var(--dur-slow);
-  }
-  .pillar.is-active {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity var(--dur-slow) var(--ease-out),
-                transform var(--dur-slow) var(--ease-out),
-                visibility 0s;
   }
 }
 .pillar__head {
@@ -800,7 +808,19 @@ h1, h2, h3 { line-height: var(--lh-snug); font-weight: 400; }
   .hero__subtitle { opacity: 1; transform: none; }
   .hero__hint { opacity: 1; }
   .hero__hint-line { animation: none; }
-  .pillar { position: static; opacity: 1; visibility: visible; transform: none; max-width: none; margin-bottom: var(--space-7); }
+  /* All three pillars stack vertically in normal flow — no absolute overlap.
+     .is-past included at matching specificity so no exit transform applies. */
+  .pillar,
+  .pillar.is-past,
+  .pillar.is-active {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+    max-width: none;
+    margin-bottom: var(--space-7);
+  }
   .pillars, .finale { height: auto; }
   .pillars__pin, .finale__pin { position: static; height: auto; overflow: visible; }
   .pillars__stage { display: block; height: auto; padding-block: var(--space-8); }
